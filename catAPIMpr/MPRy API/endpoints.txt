@@ -1,0 +1,14 @@
+Endpoints list:
+
+GET http://localhost:8080/cat/findByName/{name}
+
+GET http://localhost:8080/cat/find/{id}
+
+GET http://localhost:8080/cat/getAll
+
+PUT http://localhost:8080/cat/update  BODY: id, name, age, colour
+
+DELETE http://localhost:8080/cat/deleteById/{id}
+
+POST http://localhost:8080/cat/add BODY: id, name, age, colour
+
