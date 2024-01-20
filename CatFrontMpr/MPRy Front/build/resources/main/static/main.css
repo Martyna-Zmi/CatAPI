@@ -1,0 +1,23 @@
+p, h1, h2, h3, h4, h5{
+    font-family: "Times New Roman", Times, serif;
+}
+h1{
+    font-style: italic;
+}
+.cat-ascii{
+    color: brown;
+}
+body{
+    background: antiquewhite;
+    text-align: center;
+}
+td, th{
+    text-align: center;
+    padding: 10px;
+}
+table{
+    margin: 0 auto;
+}
+table, th, td{
+    border: 1px solid;
+}

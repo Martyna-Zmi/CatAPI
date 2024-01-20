@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Usuń</title>
+  <link rel="stylesheet" type="text/css" href="http://localhost:8081/main.css">
+</head>
+<body>
+<div th:replace="~{fragmentHeader}"></div>
+<fieldset>
+  <legend>Usuwanie kota</legend>
+  <label>Właśnie usuwasz kota o podanych danych:</label>
+  <table>
+    <thead>
+    <th>ID</th>
+    <th>Imię</th>
+    <th>Wiek</th>
+    <th>Kolor</th>
+    </thead>
+    <tbody>
+    <tr>
+      <td th:text="${cat.id}"></td>
+      <td th:text="${cat.name}"></td>
+      <td th:text="${cat.age}"></td>
+      <td th:text="${cat.colour}"></td>
+    </tr>
+    </tbody>
+  </table>
+  <form action="#" th:object="${cat}" th:action="@{'/deleteView/'+*{id}}" method="post">
+    <label>Czy na pewno chcesz usunąć tego kota?</label>
+    <input type="checkbox" required value="Tak" id="confirm">
+    <input type="hidden" th:field="*{id}" th:value="*{id}">
+    <input type="hidden" th:field="*{name}" th:value="*{name}">
+    <input type="hidden" th:field="*{age}" th:value="*{age}">
+    <input type="hidden" th:field="*{colour}" th:value="*{colour}">
+    <input type="submit" value="Usuń" id="delete">
+  </form>
+</fieldset>
+<div class="cat-ascii">
+  <h2>^•-•^</h2>
+</div>
+</body>
+</html>

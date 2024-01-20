@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Edytuj kota</title>
+    <link rel="stylesheet" type="text/css" href="http://localhost:8081/main.css">
+</head>
+<body>
+<div th:replace="~{fragmentHeader}"></div>
+<fieldset>
+    <legend>Edytuj kotka</legend>
+    <form action="#" th:object="${cat}" th:action="@{'/editView/'+${id}}" method="post">
+        <label>Nowe imię:</label>
+        <input type="text" th:field="*{name}" required>
+        <br>
+        <label>Nowy wiek:</label>
+        <input type="number" th:field="*{age}" required min="0">
+        <br>
+        <input type="hidden" th:field="*{colour}" th:value="*{colour}">
+        <input type="submit" value="Edytuj" id="edit">
+    </form>
+</fieldset>
+<div class="cat-ascii">
+  <h2>≽^•⩊•^≼</h2>
+</div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Wszystkie kotki</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+<p th:text="${param.error}"></p>
+<div th:replace="~{fragmentHeader}"></div>
+<h3>Wszystkie koty w bazie</h3>
+<div class="cat-ascii">
+    <h2>≽^•⩊•^≼   /ᐠ - ˕ -/ᐠ  /ᐠﹷ ‸ ﹷ ᐟ\ﾉ</h2>
+</div>
+<table>
+    <thead>
+    <th>ID</th>
+    <th>Imię</th>
+    <th>Wiek</th>
+    <th>Kolor</th>
+    <th>Akcje</th>
+    </thead>
+    <tbody>
+    <tr th:each="cat : ${cats}">
+        <td th:text="${cat.id}"></td>
+        <td th:text="${cat.name}"></td>
+        <td th:text="${cat.age}"></td>
+        <td th:text="${cat.colour}"></td>
+        <td>
+            <a th:href="@{'/editView/'+${cat.id}}" id = "edit">Edytuj</a>
+            <a th:href="@{'/deleteView/'+${cat.id}}" id = "delete">Usuń</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<a th:href="@{/addCat}" id="new">Dodaj nowego kota</a>
+</body>
+</html>

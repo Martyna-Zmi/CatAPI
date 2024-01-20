@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Dodaj Kota</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+<div th:replace="~{fragmentHeader}"></div>
+<h3>Dodawanie kota</h3>
+<form action="#" th:action="@{/addCat}" th:object="${cat}" method="post">
+    <label>Imie:</label>
+    <input type="text" th:field="*{name}" id="name">
+    <br>
+    <label>Wiek:</label>
+    <input type="number" th:field="*{age}" min="0" id="age">
+    <br>
+    <select id="colour" th:field="*{colour}">
+        <option value="czarny" class="option">czarny</option>
+        <option value="biały" class="option">biały</option>
+        <option value="rudy" class="option">rudy</option>
+        <option value="calico" class="option">calico</option>
+        <option value="brązowy" class="option">brązowy</option>
+        <option value="szary" class="option">szary</option>
+        <option value="biało-czarny" class="option">biało-czarny</option>
+    </select>
+    <input type="submit" value="Dodaj" id="add">
+</form>
+<div class="cat-ascii">
+    <h2>≽^•⩊•^≼ ₊˚⊹♡</h2>
+</div>
+</body>
+</html>
