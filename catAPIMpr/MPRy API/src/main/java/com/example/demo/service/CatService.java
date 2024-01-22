@@ -23,13 +23,13 @@ public class CatService {
     public Cat findCatByName(String name){
         return this.catRepository.findByName(name);
     }
-    public Optional<Cat> findById(Long id){
+    public Cat findById(Long id){
         Optional<Cat> cat = catRepository.findById(id);
         if(cat.isEmpty()) throw new CatNotFoundException();
-        else return catRepository.findById(id);
+        else return cat.get();
     }
     public Cat saveCat(Cat cat){
-        if(catRepository.findByName(cat.getName())!=null){
+        if(cat.getId()!=null && catRepository.findById(cat.getId()).isPresent()){
             throw new CatAlreadyExistsException();
         }
         if(cat.getAge()<0){
@@ -46,38 +46,33 @@ public class CatService {
         }
     }
     public Cat updateCat(Cat cat) {
-        Cat catFromDb = catRepository.getCatById(cat.getId());
+        Optional<Cat> catFromDb = catRepository.findById(cat.getId());
         System.out.println(cat.getName().trim().length());
-        if(catFromDb==null){
+        if(catFromDb.isEmpty()){
             throw new CatNotFoundException();
         }
         else if(cat.getAge()==null || cat.getName().trim().length()==0 || cat.getColour().trim().length()==0){
             throw new IncompleteDataException("Please provide data to edit! (name/age/colour)");
         }
         else{
-            if(catFromDb.getAge()!=null){
-                if(cat.getAge()>=0) catFromDb.setAge(cat.getAge());
-                else throw new AgeIsNegativeException();
-            }
+            Cat catFound = catFromDb.get();
+            if(cat.getAge()>=0) catFound.setAge(cat.getAge());
+            else throw new AgeIsNegativeException();
             System.out.println("Aktualizacja kota o id: "+cat.getId());
-            System.out.println("Kotek przed aktualizacją: "+catFromDb.makeNoise());
-            if(catFromDb.getName()!=null) catFromDb.setName(cat.getName().toUpperCase());
+            System.out.println("Kotek przed aktualizacją: "+catFound.makeNoise());
+            catFound.setName(cat.getName().toUpperCase());
             System.out.println("Zaktualizowano kota");
             System.out.println("Kotek po aktualizacji: "+cat.makeNoise());
-            return catRepository.save(catFromDb);
+            return catRepository.save(catFound);
         }
     }
     public List<Cat> findAll(){
         return (List<Cat>) this.catRepository.findAll();
     }
     public long deleteById(Long id){
-        if(findById(id).isPresent()){
-            catRepository.deleteById(id);
-            System.out.println("Usunięto koda o Id: "+id);
-        }
-        else {
-            throw new CatNotFoundException();
-        }
+        Cat cat = findById(id);
+        catRepository.deleteById(cat.getId());
+        System.out.println("Usunięto koda o Id: "+id);
         return id;
     }
 }

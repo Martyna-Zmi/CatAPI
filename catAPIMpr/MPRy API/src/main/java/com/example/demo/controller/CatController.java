@@ -21,7 +21,7 @@ public class CatController {
         return catService.findCatByName(name);
     }
     @GetMapping("cat/find/{id}")
-    public Optional<Cat> findCatById(@PathVariable("id") long id){
+    public Cat findCatById(@PathVariable("id") long id){
         return catService.findById(id);
     }
     @GetMapping("cat/getAll")

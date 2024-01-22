@@ -10,5 +10,5 @@ PUT http://localhost:8080/cat/update  BODY: id, name, age, colour
 
 DELETE http://localhost:8080/cat/deleteById/{id}
 
-POST http://localhost:8080/cat/add BODY: id, name, age, colour
+POST http://localhost:8080/cat/add BODY: name, age, colour
 

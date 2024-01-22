@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.demo.selenium.SeleniumTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-01-22T16:47:47" hostname="LAPTOP-O84MUJ1B" time="3.423">
+  <properties/>
+  <testcase name="deleteFormSubmit()" classname="com.example.demo.selenium.SeleniumTest" time="3.423"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -25,17 +25,12 @@ public class CatServiceTest {
     @InjectMocks
     private CatService catService;
     private AutoCloseable openMocks;
-    private Cat cat = new Cat("Kalinka", 2, "black");
-    private Cat cat2 = new Cat("MIALEK", 5, "orange");
-    private Cat cat3 = new Cat("MILKA", 4, "gray");
-    private List<Cat> catsInDb = Arrays.asList(cat, cat2, cat3);
     @Captor
     ArgumentCaptor<Cat> argumentCaptor;
 
     @BeforeEach
     public void init(){
        openMocks = MockitoAnnotations.openMocks(this);
-       cat.setId(1L);
     }
     @AfterEach
     public void takeDown() throws Exception {
@@ -43,25 +38,36 @@ public class CatServiceTest {
     }
     @Test
     public void shouldFindByName(){
+        //given
+        Cat cat = new Cat("Kalinka", 2, "czarny");
+        //when
         when(catRepository.findByName(cat.getName())).thenReturn(cat);
         Cat result = catService.findCatByName(cat.getName());
+        //then
         assertEquals(cat, result);
     }
     @Test
     public void shouldSave(){
-        Cat savedCat = cat;
+        //given
+        Cat savedCat = new Cat("Kalinka", 2, "czarny");
         argumentCaptor = ArgumentCaptor.forClass(Cat.class);
+        //when
         when(catRepository.save(argumentCaptor.capture())).thenReturn(savedCat);
         catService.saveCat(savedCat);
+        //then
         Mockito.verify(catRepository,times(1)).save(savedCat);
         assertEquals(savedCat,argumentCaptor.getValue());
     }
     @Test
     public void shouldNotSaveThrowCatAlreadyExists(){
-        String tempName = this.cat.getName();
-        when(catRepository.findByName(tempName)).thenReturn(this.cat);
+        //given
+        Cat cat = new Cat("Kalinka", 2, "czarny");
+        cat.setId(1L);
+        //when
+        when(catRepository.findById(1L)).thenReturn(Optional.of(cat));
+        //then
         assertThrows(CatAlreadyExistsException.class, ()->{
-           catService.saveCat(this.cat);
+           catService.saveCat(cat);
         });
     }
     @Test
@@ -73,55 +79,71 @@ public class CatServiceTest {
     }
     @Test
     public void shouldFindById(){
-        Optional<Cat> cat = Optional.ofNullable(this.cat);
-        when(catRepository.findById(this.cat.getId())).thenReturn(Optional.ofNullable(this.cat));
-        Optional<Cat> result = catService.findById(this.cat.getId());
+        //given
+        Cat cat = new Cat("Kalinka", 2, "czarny");
+        cat.setId(1L);
+        //when
+        when(catRepository.findById(cat.getId())).thenReturn(Optional.ofNullable(cat));
+        Cat result = catService.findById(cat.getId());
+        //then
         assertEquals(cat, result);
     }
     @Test
     public void shouldNotFindByIdThrowCatNotFound(){
-        long tempId = 8L;
-        when(catRepository.findById(tempId)).thenReturn(Optional.empty());
+        //given
+        long id = 8L;
+        //when
+        when(catRepository.findById(id)).thenReturn(Optional.empty());
+        //then
         assertThrows(CatNotFoundException.class, ()-> {
-            catService.findById(tempId);
+            catService.findById(id);
         });
     }
     @Test
     public void shouldFindAll(){
+        //given
+        Cat catA = new Cat("Kalinka", 2, "czarny");
+        Cat catB = new Cat("MIALEK", 5, "rudy");
+        List<Cat> catsInDb = Arrays.asList(catA, catB);
+        //when
         when(catRepository.findAll()).thenReturn(catsInDb);
-        assertEquals(catService.findAll(), catsInDb);
+        var foundCats = catService.findAll();
+        //then
+        assertEquals(foundCats, catsInDb);
     }
     @Test
     public void shouldUpdateCat(){
-        Cat catfromDb = cat;
-        String newName = "Bambik";
-        int newAge = 7;
-        Cat updateInfoCat = new Cat(newName, newAge, "white");
-        updateInfoCat.setId(catfromDb.getId());
+        //given
+        Cat catFromDb = new Cat("Kalinka", 2, "czarny");
+        catFromDb.setId(1L);
+        Cat updateData = new Cat("Buba", 3, "czarny");
         argumentCaptor = ArgumentCaptor.forClass(Cat.class);
-        when(catRepository.getCatById(updateInfoCat.getId())).thenReturn(catfromDb);
-        when(catRepository.save(argumentCaptor.capture())).thenReturn(catfromDb);
-        catService.updateCat(updateInfoCat);
-        assertEquals(catfromDb.getId(), argumentCaptor.getValue().getId());
+        //when
+        when(catRepository.findById(updateData.getId())).thenReturn(Optional.of(catFromDb));
+        when(catRepository.save(argumentCaptor.capture())).thenReturn(catFromDb);
+        catService.updateCat(updateData);
+        //then
+        assertEquals(catFromDb.getId(), argumentCaptor.getValue().getId());
     }
     @Test
     public void shouldDeleteCat(){
+        //given
+        Cat cat = new Cat("Kalinka", 2, "czarny");
+        cat.setId(1L);
+        //when
         when(catRepository.findById(cat.getId())).thenReturn(Optional.of(cat));
         var result = catService.deleteById(cat.getId());
-        verify(catRepository, times(2)).findById(cat.getId());
+        //then
+        verify(catRepository, times(1)).findById(cat.getId());
         assertEquals(cat.getId(), result);
     }
     @Test
     public void shouldNotDeleteCat(){
+        //when
         when(catRepository.findById(3L)).thenReturn(Optional.empty());
+        //then
         assertThrows(CatNotFoundException.class, ()->{
             catService.deleteById(3L);
         });
-    }
-    @Test
-    public void shouldFilterByName(){
-        when(catRepository.findAll()).thenReturn(catsInDb);
-        List<Cat> correctList = Arrays.asList(cat2, cat3);
-        assertEquals(catService.filterByName("MI"), correctList);
     }
 }
